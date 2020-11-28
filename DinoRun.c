@@ -13,13 +13,13 @@
 int texchangeid,terchangeid,speedchangeid,sunshowid,sunsizeid,sunspinid,settimeid,daylenid;
 
 							//flags declaration
-int COLLISIONCHECKTIME=1;				//check for collision ever millisecond
+int collisionCTime=1;				//check for collision ever millisecond
 
-int JUMPSPEED=4;					//speed of jump: 125 pixel/sec, jump time: 2.4sec
-int MAX_HEIGHT=180;					//max height that can be reached by T_Rex: 150
+int jspeed=4;					//speed of jump: 125 pixel/sec, jump time: 2.4sec
+int maxH=180;					//max height that can be reached by T_Rex: 150
 
-int NUM_CACT=25;					//number of cactus position stored: 25
-int DASH_CACT_SAND=3;					//speed of cactus: 333.33 pixels/sec, Time to attack: 6 sec
+int Ncactus=25;					//number of cactus position stored: 25
+int cactus_sand=3;					//speed of cactus: 333.33 pixels/sec, Time to attack: 6 sec
 
 int SCREEN_CENTERX=1000;				//center X coordinate for the screen: 1000
 int SCREEN_CENTERY=250;					//center Y coordinate for the screen: 250
@@ -369,9 +369,9 @@ void animateSky(int value)
 }
 void flying()						//Jumping of T_Rex
 {
-	if(jflag==1 && height<MAX_HEIGHT)		//if jumping and below max height
+	if(jflag==1 && height<maxH)		//if jumping and below max height
 		height++;				//increase height
-	else if(jflag==1 && height==MAX_HEIGHT)		//if reached max height
+	else if(jflag==1 && height==maxH)		//if reached max height
 		jflag=-1;				//start falling
 }
 void falling()						//falling of T_Rex
@@ -392,7 +392,7 @@ void animateTRex(int value)				//animation for T_Rex's jumping;
 		falling();				//downward movement of T_Rex
 		glutPostRedisplay(); 			//Inform GLUT that the display has changed;
     	}
-    	glutTimerFunc(JUMPSPEED,animateTRex,0);		//Call animateTRex after each 8 millisecond;
+    	glutTimerFunc(jspeed,animateTRex,0);		//Call animateTRex after each 8 millisecond;
 
 }
 void animateCactus(int value)				//animation,reset and check collision for cactus;
@@ -400,15 +400,15 @@ void animateCactus(int value)				//animation,reset and check collision for cactu
 	int i;
 	if(gameStart!=0)
 	{
-		for(i=0;i<NUM_CACT;i++)			//for ever cactus object
+		for(i=0;i<Ncactus;i++)			//for ever cactus object
 		{
 			if(cactpos[i]==-40)		//to reset the position of cactus once the pass T_Rex
-			       cactpos[i]=(cactposmsg[i]+cactposmsg[NUM_CACT-1]);//reset
+			       cactpos[i]=(cactposmsg[i]+cactposmsg[Ncactus-1]);//reset
 			cactpos[i]--;			//left movement of cactus
 		}
 		glutPostRedisplay(); 			// Inform GLUT that the display has changed;
     	}
-    	glutTimerFunc(DASH_CACT_SAND,animateCactus,0);	//Call animateCactus after each 3 millisecond;
+    	glutTimerFunc(cactus_sand,animateCactus,0);	//Call animateCactus after each 3 millisecond;
 }
 void animateSand(int value)				//animation,reset and check collision for cactus;
 {
@@ -423,7 +423,7 @@ void animateSand(int value)				//animation,reset and check collision for cactus;
 		}
 		glutPostRedisplay(); 			// Inform GLUT that the display has changed;
     	}
-    	glutTimerFunc(DASH_CACT_SAND,animateSand,0);	//Call animateCactus after each 3 millisecond;
+    	glutTimerFunc(cactus_sand,animateSand,0);	//Call animateCactus after each 3 millisecond;
 }
 void killSrcnSquareRotation(int value)			//angle updater for kill screen square
 {
@@ -487,7 +487,7 @@ void checkCollision(int value)				//check if game is over or not and update scor
 	int i;
 	if(collisioncheck)
 	{
-		for(i=0;i<NUM_CACT;i++)			//for ever cactus object
+		for(i=0;i<Ncactus;i++)			//for ever cactus object
 		{
 			if(cactpos[i]>=110 && cactpos[i]<=120)//if cactus is in range,be careful and so check if you hit a cactus and hurt T_Rex
 				if(height<85 && !gameover)//if the jump is low, T_Rex is hurt; check if the cactus is touching the body or 	not
@@ -516,7 +516,7 @@ void checkCollision(int value)				//check if game is over or not and update scor
 		}
 	}
 	glutPostRedisplay(); 				// Inform GLUT that the display has changed;
-	glutTimerFunc(COLLISIONCHECKTIME,checkCollision,0);//Call animateCactus after each 33 millisecond;
+	glutTimerFunc(collisionCTime,checkCollision,0);//Call animateCactus after each 33 millisecond;
 }
 
 
@@ -549,7 +549,7 @@ void display()
 				SHOWSUN=1;		//if light level are high then sun will shine
 			if(SHOWSUN && showsunmenu)	//if sun has to shine
 				sunShine();		//then the sun will shine
-			for(i=0;i<NUM_CACT;i++)		//for every cactus plant
+			for(i=0;i<Ncactus;i++)		//for every cactus plant
 				plotCactus(cactpos[i]);	//plot the cactus in their position
 		}
 		else					//if game is over
@@ -586,7 +586,7 @@ void reset()						//initialize or reset the value of constants to start a new ga
 	jflag=0;					//		|
 	jcount=0;					//		|
 	gameover=0;					//		|
-	DASH_CACT_SAND=3;				//		|
+	cactus_sand=3;				//		|
 	DAYCYCLE=10;					//		|
 	SPINSUN=1;					//		|
 	SUN_SCALE=0.5;					//		|
@@ -594,7 +594,7 @@ void reset()						//initialize or reset the value of constants to start a new ga
 	score=0;					//		|
 	trexcolor=1;					//		|
 	landcolor=0;					//		V
-	for(i=0;i<NUM_CACT;i++)				//reset the position of cactus
+	for(i=0;i<Ncactus;i++)				//reset the position of cactus
 		cactpos[i]=cactposmsg[i];
 	for(i=0;i<4;i++)				//reset the value of the kill screen square
 	{
@@ -664,11 +664,11 @@ void speedchange(int key4)				//submenu to change the travelling speed
 {
 	switch(key4)
 	{
-		case 1:	DASH_CACT_SAND=3;
+		case 1:	cactus_sand=3;
 			break;
-		case 2:	DASH_CACT_SAND=6;
+		case 2:	cactus_sand=6;
 			break;
-		case 3:	DASH_CACT_SAND=9;
+		case 3:	cactus_sand=9;
 			break;
 	}
 }
@@ -831,10 +831,10 @@ int main(int argc,char** argv)				//MAIN FUNCION
 	glutKeyboardFunc(keyboardEvent);
 	myinit();					//initialization function
 	menusystem();					//menu system
-	glutTimerFunc(JUMPSPEED,animateTRex,0);		//timer to animate jumping of TRex
-	glutTimerFunc(DASH_CACT_SAND,animateCactus,0);	//timer to animate movement of cactus
-	glutTimerFunc(DASH_CACT_SAND,animateSand,0);	//timer to animate movement of sand Granules
-	glutTimerFunc(COLLISIONCHECKTIME,checkCollision,0);//timer to check collision between TRex and Cactus
+	glutTimerFunc(jspeed,animateTRex,0);		//timer to animate jumping of TRex
+	glutTimerFunc(cactus_sand,animateCactus,0);	//timer to animate movement of cactus
+	glutTimerFunc(cactus_sand,animateSand,0);	//timer to animate movement of sand Granules
+	glutTimerFunc(collisionCTime,checkCollision,0);//timer to check collision between TRex and Cactus
 	glutTimerFunc(ANGULAR_SPEED,killSrcnSquareRotation,0);//timer to animate rotation of kill screen square
 	glutTimerFunc(ZOOMING,killSrcnSquareScaling,0);	//timer to animate scaling of the kill screen square
 	glutTimerFunc(SUN_ASPEED,sunRotation,0);	//timer to animate rotation of sun
