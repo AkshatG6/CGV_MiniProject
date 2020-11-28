@@ -5,3 +5,4 @@ Our references -
 https://www.opengl.org/
 https://www.khronos.org/registry/OpenGL/index_gl.php
 https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2 - youtube playlist
+https://www.youtube.com/watch?v=EIpxcNl2WJU - We used this tutorial for implementing some functions.
